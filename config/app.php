@@ -123,6 +123,11 @@ return [
 
     'cipher' => 'AES-256-CBC',
 
+    'stock' => [
+        'alpha_vantage' => [
+            'key' => env('S3R4EF2TSQHOG7PG')
+        ]
+    ],
     /*
     |--------------------------------------------------------------------------
     | Autoloaded Service Providers
@@ -174,7 +179,9 @@ return [
         // App\Providers\BroadcastServiceProvider::class,
         App\Providers\EventServiceProvider::class,
         App\Providers\RouteServiceProvider::class,
-
+        App\Providers\FortifyServiceProvider::class,
+        App\Providers\JetstreamServiceProvider::class,
+        App\Providers\StocksServiceProvider::class,
     ],
 
     /*
@@ -226,7 +233,7 @@ return [
         'URL' => Illuminate\Support\Facades\URL::class,
         'Validator' => Illuminate\Support\Facades\Validator::class,
         'View' => Illuminate\Support\Facades\View::class,
-
+        'Stock' => App\Facades\StockDownload::class
     ],
 
 ];

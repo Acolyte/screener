@@ -1,10 +1,15 @@
 /node_modules
 /public/hot
 /public/storage
+/public/js/app.js
+/public/css/app.css
 /storage/*.key
 /vendor
-.env
+.env*
+.idea
 .env.backup
+package-lock.json
+composer.lock
 .phpunit.result.cache
 docker-compose.override.yml
 Homestead.json

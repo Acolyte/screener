@@ -6,7 +6,6 @@ use App\Models\Exchange;
 use App\Models\Stock;
 use Illuminate\Console\Command;
 use Illuminate\Support\Carbon;
-use Illuminate\Support\Facades\DB;
 
 class PopulateStocks extends Command
 {
@@ -54,7 +53,7 @@ class PopulateStocks extends Command
         }
 
         $Exchanges = [];
-        // Extract exchanges first and populate them
+        // Extract exchanges first and then insert or update them
         foreach ($Results as $Result) {
             if (!in_array($Result['exchange'], array_values($Exchanges))) {
                 $Exchanges[] = $Result['exchange'];
@@ -63,6 +62,7 @@ class PopulateStocks extends Command
         }
 
         $ExchangeList = Exchange::query()->select(['id', 'name'])->get()->all();
+        $ExchangeMap = [];
         foreach($ExchangeList as $Exchange) {
             $ExchangeMap[$Exchange->name] = $Exchange->id;
         }
@@ -83,7 +83,9 @@ class PopulateStocks extends Command
         return 0;
     }
 
-    private function ArrayFromCSV(string $file, bool $hasFieldNames = false, ?int $lineLength = 512, string $separator = ',', string $enclosure = '"', string $escape = "\\")
+    private function ArrayFromCSV(string $file, bool $hasFieldNames = false,
+                                  ?int $lineLength = 512, string $separator = ',',
+                                  string $enclosure = '"', string $escape = '\\')
     {
         $result = [];
         $file = fopen($file, 'r');
