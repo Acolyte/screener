@@ -31,7 +31,7 @@ class Exchange extends Model
 
     public $table = 'exchanges';
 
-    public $fillable = ['name'];
+    public $fillable = ['code', 'name'];
 
     /**
      * Get the comments for the blog post.

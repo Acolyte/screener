@@ -9,6 +9,7 @@
     "license": "MIT",
     "require": {
         "php": "^7.3|^8.0",
+        "ext-pdo": "*",
         "barryvdh/laravel-ide-helper": "^2.9",
         "fideloper/proxy": "^4.4",
         "fruitcake/laravel-cors": "^2.0",
@@ -19,6 +20,7 @@
         "laravel/tinker": "^2.5",
         "livewire/livewire": "^2.0",
         "scheb/yahoo-finance-api": "^4.2",
+        "spatie/enum": "^3.7",
         "spatie/laravel-dashboard": "^2.0"
     },
     "require-dev": {

@@ -125,7 +125,7 @@ return [
 
     'stock' => [
         'alpha_vantage' => [
-            'key' => env('S3R4EF2TSQHOG7PG')
+            'key' => env('ALPHA_VANTAGE_API_KEY')
         ]
     ],
     /*

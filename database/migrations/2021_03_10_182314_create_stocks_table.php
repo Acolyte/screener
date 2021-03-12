@@ -1,5 +1,6 @@
 <?php
 
+use App\Enum\StockEnum;
 use App\Models\Stock;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
@@ -18,7 +19,7 @@ class CreateStocksTable extends Migration
             $table->id();
             $table->string('symbol', 16)->index();
             $table->foreignId('exchange_id');
-            $table->enum('type', array_keys(Stock::$Types));
+            $table->unsignedSmallInteger('type')->default(StockEnum::stock()->value);
             $table->string('name', 256);
             $table->boolean('active')->default(true);
             $table->date('ipoAt');

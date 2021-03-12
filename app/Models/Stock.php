@@ -36,12 +36,6 @@ use Illuminate\Database\Eloquent\Model;
  */
 class Stock extends Model
 {
-    use HasFactory;
-
-    public const TYPE_STOCK = 1;
-    public const TYPE_ETF   = 2;
-    public static $Types = [self::TYPE_STOCK => 'stock', self::TYPE_ETF => 'etf'];
-
     public $table = 'stocks';
 
     public $fillable = ['symbol', 'exchange_id', 'type', 'name', 'active', 'ipoAt', 'delistedAt'];
