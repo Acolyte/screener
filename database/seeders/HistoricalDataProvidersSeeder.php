@@ -6,7 +6,7 @@ use App\Models\Provider;
 use Illuminate\Database\Seeder;
 use Throwable;
 
-class ProvidersSeeder extends Seeder
+class HistoricalDataProvidersSeeder extends Seeder
 {
     /**
      * Run the database seeds.
@@ -15,19 +15,22 @@ class ProvidersSeeder extends Seeder
      */
     public function run()
     {
-        foreach ($this->providers() as $providerData) {
+        foreach ($this->providers() as $name => $config) {
+            if (!is_array($config)) {
+                continue;
+            }
             try {
-                $provider = new Provider($providerData);
+                $provider = new Provider($config);
                 $provider->saveOrFail();
             }
             catch(Throwable $ex) {
-                echo 'Failed to seed ' . $providerData['name'] . ': ' . $ex->getMessage() . PHP_EOL;
+                echo 'Failed to seed ' . $config['name'] . ': ' . $ex->getMessage() . PHP_EOL;
             }
         }
     }
 
     public function providers()
     {
-        return config('app.stocks');
+        return config('app.historicaldata');
     }
 }

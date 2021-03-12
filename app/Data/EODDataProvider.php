@@ -1,12 +1,11 @@
 <?php
 
-namespace App\Exchanges\EOD;
+namespace App\Data;
 
-use App\Exchanges\Exchange;
 use ArrayAccess;
 use DateTimeInterface;
 
-class EODExchange implements Exchange
+class EODDataProvider implements DataProvider
 {
     public function __construct($config)
     {

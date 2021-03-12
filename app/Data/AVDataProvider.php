@@ -1,12 +1,11 @@
 <?php
 
-namespace App\Exchanges\AlphaVantage;
+namespace App\Data;
 
-use App\Exchanges\Exchange;
 use ArrayAccess;
 use DateTimeInterface;
 
-class AVExchange implements Exchange
+class AVDataProvider implements DataProvider
 {
     public function __construct($config)
     {

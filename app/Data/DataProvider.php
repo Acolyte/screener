@@ -1,11 +1,11 @@
 <?php
 
-namespace App\Exchanges;
+namespace App\Data;
 
 use ArrayAccess;
 use DateTimeInterface;
 
-interface Exchange
+interface DataProvider
 {
     public function GetExchanges(): iterable;
 

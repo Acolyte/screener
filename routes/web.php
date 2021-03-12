@@ -23,6 +23,16 @@ Route::middleware(['auth:sanctum', 'verified'])->get('/dashboard', function ()
     return view('dashboard');
 })->name('dashboard');
 
+Route::middleware(['auth:sanctum', 'verified'])->get('/providers', function ()
+{
+    return view('providers');
+})->name('providers');
+
+Route::middleware(['auth:sanctum', 'verified'])->get('/exchanges', function ()
+{
+    return view('exchanges');
+})->name('exchanges');
+
 Route::middleware(['auth:sanctum', 'verified'])->get('/stocks', function ()
 {
     return view('stocks');
