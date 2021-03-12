@@ -3,22 +3,23 @@
 namespace App\Exchanges\AlphaVantage;
 
 use App\Exchanges\Exchange;
-use Illuminate\Support\Collection;
+use ArrayAccess;
+use DateTimeInterface;
 
 class AVExchange implements Exchange
 {
-
-    public function GetExchanges() : iterable
+    public function GetExchanges(): iterable
     {
         // TODO: Implement GetExchanges() method.
+        return collect();
     }
 
-    public function GetStocksList($Exchange = null) : iterable
+    public function GetStocksList($Exchange = null): iterable
     {
         // TODO: Implement GetStocksList() method.
     }
 
-    public function GetStockData($Stock, \DateTimeInterface $From, \DateTimeInterface $To, $Period, $Filters) : iterable
+    public function GetStockData($Stock, DateTimeInterface $Date, $Period, $Filters): ArrayAccess
     {
         // TODO: Implement GetStockData() method.
     }

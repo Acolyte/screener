@@ -10,8 +10,8 @@ use Spatie\Enum\Enum;
  */
 class StockEnum extends Enum
 {
-    public const STOCK = 1;
-    public const ETF   = 2;
+    private const STOCK = 1;
+    private const ETF   = 2;
 
     protected static function values(): array
     {

@@ -15,7 +15,8 @@ class CreateExchangesTable extends Migration
     {
         Schema::create('exchanges', function (Blueprint $table) {
             $table->id();
-            $table->string('code')->unique();
+            $table->smallInteger('provider_id')->comment('Data provider (Alpha Vantage, Quandl, EOD)');
+            $table->string('code')->unique()->comment('ISO 10383 Code for Exchanges and Market Identification (MIC)');
             $table->string('name')->nullable()->default(null);
             $table->timestamps();
         });

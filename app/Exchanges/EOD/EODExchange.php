@@ -3,23 +3,42 @@
 namespace App\Exchanges\EOD;
 
 use App\Exchanges\Exchange;
-use Illuminate\Support\Collection;
+use ArrayAccess;
+use DateTimeInterface;
 
 class EODExchange implements Exchange
 {
-
-    public function GetExchanges() : iterable
+    /**
+     * Calls https://eodhistoricaldata.com/api/exchanges-list/?api_token={YOUR_API_KEY}&fmt=json
+     * @return iterable
+     */
+    public function GetExchanges(): iterable
     {
         // TODO: Implement GetExchanges() method.
     }
 
-    public function GetStocksList($Exchange = null) : iterable
+    /**
+     * Calls https://eodhistoricaldata.com/api/exchange-symbol-list/{EXCHANGE_CODE}?api_token={YOUR_API_KEY}
+     * @param null $Exchange
+     * @return iterable
+     */
+    public function GetStocksList($Exchange = null): iterable
     {
         // TODO: Implement GetStocksList() method.
     }
 
-    public function GetStockData($Stock, \DateTimeInterface $From, \DateTimeInterface $To, $Period, $Filters) : iterable
+    /**
+     * Calls https://eodhistoricaldata.com/api/eod-bulk-last-day/{EXCHANGE_CODE}?api_token={YOUR_API_KEY}
+     *
+     * @param                    $Stock
+     * @param \DateTimeInterface $Date
+     * @param                    $Period
+     * @param                    $Filters
+     * @return \ArrayAccess
+     */
+    public function GetStockData($Stock, DateTimeInterface $Date, $Period, $Filters): ArrayAccess
     {
         // TODO: Implement GetStockData() method.
     }
+
 }
