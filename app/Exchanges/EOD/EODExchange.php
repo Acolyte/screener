@@ -8,6 +8,11 @@ use DateTimeInterface;
 
 class EODExchange implements Exchange
 {
+    public function __construct($config)
+    {
+
+    }
+
     /**
      * Calls https://eodhistoricaldata.com/api/exchanges-list/?api_token={YOUR_API_KEY}&fmt=json
      * @return iterable

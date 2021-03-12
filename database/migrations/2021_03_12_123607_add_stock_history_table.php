@@ -1,6 +1,5 @@
 <?php
 
-use App\Enum\ExchangeEnum;
 use App\Enum\TimeframeEnum;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;

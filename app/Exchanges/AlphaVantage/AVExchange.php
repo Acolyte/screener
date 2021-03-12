@@ -8,6 +8,11 @@ use DateTimeInterface;
 
 class AVExchange implements Exchange
 {
+    public function __construct($config)
+    {
+
+    }
+
     public function GetExchanges(): iterable
     {
         // TODO: Implement GetExchanges() method.

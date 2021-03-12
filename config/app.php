@@ -1,6 +1,6 @@
 <?php
 
-use App\Enum\ExchangeEnum;
+use App\Enum\ProviderEnum;
 
 return [
 
@@ -125,11 +125,15 @@ return [
 
     'cipher' => 'AES-256-CBC',
 
-    'stock' => [
-        ExchangeEnum::alphavantage()->label => ['name' => 'Alpha Vantage Co',
+    'exchanges' => [
+
+    ],
+
+    'stocks' => [
+        ProviderEnum::alphavantage()->label => ['name' => 'Alpha Vantage Co',
                                                 'site' => 'https://www.alphavantage.co/',
                                                 'key'  => env('ALPHA_VANTAGE_API_KEY')],
-        ExchangeEnum::eod()->label          => ['name' => 'EOD Historical Data',
+        ProviderEnum::eod()->label          => ['name' => 'EOD Historical Data',
                                                 'site' => 'https://eodhistoricaldata.com/',
                                                 'key'  => env('EOD_API_KEY')],
     ],
@@ -145,6 +149,9 @@ return [
     */
 
     'providers' => [
+
+        App\Providers\EODProvider::class,
+        App\Providers\AlphaVantageProvider::class,
 
         /*
          * Laravel Framework Service Providers...
@@ -186,7 +193,6 @@ return [
         App\Providers\RouteServiceProvider::class,
         App\Providers\FortifyServiceProvider::class,
         App\Providers\JetstreamServiceProvider::class,
-        App\Providers\StocksServiceProvider::class,
     ],
 
     /*

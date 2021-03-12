@@ -28,6 +28,6 @@ class ProvidersSeeder extends Seeder
 
     public function providers()
     {
-        return config('app.stock');
+        return config('app.stocks');
     }
 }
