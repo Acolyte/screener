@@ -2,14 +2,14 @@
 
 namespace App\Facades;
 
-use ArrayAccess;
 use DateTimeInterface;
 use Illuminate\Support\Facades\Facade;
+use Traversable;
 
 /**
- * @method static iterable GetExchanges()
- * @method static iterable GetStocksList($Exchange = null)
- * @method static ArrayAccess GetStockData($Stock, DateTimeInterface $Date, $Period, $Filters)
+ * @method static Traversable GetExchanges()
+ * @method static Traversable GetStocksList($Exchange = null)
+ * @method static Traversable GetStockData($Stock, DateTimeInterface $Date, $Period, $Filters)
  */
 class HistoricalData extends Facade
 {

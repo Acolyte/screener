@@ -19,7 +19,7 @@ class Provider extends Model
 {
     public $table = 'providers';
 
-    protected $fillable = ['name', 'site', 'key'];
+    protected $fillable = ['code', 'name', 'site', 'key'];
 
     public function exchanges()
     {

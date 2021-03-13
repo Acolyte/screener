@@ -15,12 +15,18 @@ class HistoricalDataProvidersSeeder extends Seeder
      */
     public function run()
     {
-        foreach ($this->providers() as $name => $config) {
+        foreach ($this->providers() as $code => $config) {
             if (!is_array($config)) {
                 continue;
             }
             try {
-                $provider = new Provider($config);
+                $config['code'] = $code;
+                $provider = new Provider();
+                foreach ($config as $key => $value) {
+                    if (!is_array($value)) {
+                        $provider->setAttribute($key, $value);
+                    }
+                }
                 $provider->saveOrFail();
             }
             catch(Throwable $ex) {

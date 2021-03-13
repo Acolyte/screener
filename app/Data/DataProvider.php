@@ -2,14 +2,14 @@
 
 namespace App\Data;
 
-use ArrayAccess;
 use DateTimeInterface;
+use Traversable;
 
 interface DataProvider
 {
-    public function GetExchanges(): iterable;
+    public function GetExchanges(): Traversable;
 
-    public function GetStocksList($Exchange = null): iterable;
+    public function GetStocksList($Exchange = null): Traversable;
 
-    public function GetStockData($Stock, DateTimeInterface $Date, $Period, $Filters): ArrayAccess;
+    public function GetStockData($Stock, DateTimeInterface $Date, $Period, $Filters): Traversable;
 }

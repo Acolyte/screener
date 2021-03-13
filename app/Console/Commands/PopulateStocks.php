@@ -2,10 +2,15 @@
 
 namespace App\Console\Commands;
 
+use App\Enum\ProviderEnum;
+use App\Enum\StockEnum;
+use App\Facades\HistoricalData;
 use App\Models\Exchange;
+use App\Models\Provider;
 use App\Models\Stock;
 use Illuminate\Console\Command;
 use Illuminate\Support\Carbon;
+use Throwable;
 
 class PopulateStocks extends Command
 {
@@ -46,32 +51,40 @@ class PopulateStocks extends Command
             return 1;
         }
 
-        $Results = $this->ArrayFromCSV($Filename, true);
-        if (!$Results) {
-            echo 'Could not read data from given file' . PHP_EOL;
+        try {
+            $Provider = Provider::query()->where('code', ProviderEnum::alphavantage()->label)->firstOrFail();
+        }
+        catch(Throwable $ex) {
+            echo 'Failed to retrieve provider with code "' . ProviderEnum::alphavantage()->label . '" from the database, perform migration and seeding first' . PHP_EOL;
             return 1;
         }
 
+        echo 'Begin processing ' . $Provider->name . ' data ...' . PHP_EOL;
+        $ProviderExchanges = HistoricalData::GetExchanges();
+
         $Exchanges = [];
         // Extract exchanges first and then insert or update them
-        foreach ($Results as $Result) {
-            if (!in_array($Result['exchange'], array_values($Exchanges))) {
-                $Exchanges[] = $Result['exchange'];
-                Exchange::updateOrCreate(['name' => $Result['exchange']]);
+        foreach ($ProviderExchanges as $ExchangeCode) {
+            if (!in_array($ExchangeCode, array_values($Exchanges))) {
+                $Exchanges[] = $ExchangeCode;
+                Exchange::updateOrCreate(['provider_id' => $Provider->id, 'code' => $ExchangeCode, 'name' => $ExchangeCode]);
             }
         }
+        echo 'Successfully fetched and populated ' . iterator_count($ProviderExchanges) . ' exchange(s) into the database' . PHP_EOL;
 
         $ExchangeList = Exchange::query()->select(['id', 'name'])->get()->all();
         $ExchangeMap = [];
-        foreach($ExchangeList as $Exchange) {
+        foreach ($ExchangeList as $Exchange) {
             $ExchangeMap[$Exchange->name] = $Exchange->id;
         }
 
-        foreach ($Results as $Result) {
+        $Stocks = HistoricalData::GetStocksList();
+
+        foreach ($Stocks as $Result) {
             $Data = ['symbol'      => $Result['symbol'],
                      'name'        => $Result['name'],
                      'exchange_id' => $ExchangeMap[$Result['exchange']],
-                     'type'        => array_flip(Stock::$Types)[strtolower($Result['assetType'])],
+                     'type'        => (StockEnum::from(strtolower($Result['assetType']))->value),
                      'active'      => strtolower($Result['status']) === 'active',
                      'ipoAt'       => Carbon::parse($Result['ipoDate'])->toDate(),
                      'delistedAt'  => $Result['delistingDate'] !== "null" ? Carbon::parse($Result['delistingDate'])->toDate() : null
@@ -79,30 +92,7 @@ class PopulateStocks extends Command
             Stock::updateOrCreate($Data);
         }
 
-        echo 'Successfully processed ' . count($Results) . ' stock entries' . PHP_EOL;
+        echo 'Successfully fetched and populated ' . iterator_count($Stocks) . ' stock entries into the database' . PHP_EOL;
         return 0;
-    }
-
-    private function ArrayFromCSV(string $file, bool $hasFieldNames = false,
-                                  ?int $lineLength = 512, string $separator = ',',
-                                  string $enclosure = '"', string $escape = '\\')
-    {
-        $result = [];
-        $file = fopen($file, 'r');
-        #TO DO: There must be a better way of finding out the size of the longest row... until then
-        if ($hasFieldNames) {
-            $keys = fgetcsv($file, $lineLength, $separator, $enclosure, $escape);
-        }
-        while ($row = fgetcsv($file, $lineLength, $separator, $enclosure, $escape)) {
-            $n = count($row);
-            $res = [];
-            for ($i = 0; $i < $n; $i++) {
-                $idx = ($hasFieldNames) ? $keys[$i] : $i;
-                $res[$idx] = $row[$i];
-            }
-            $result[] = $res;
-        }
-        fclose($file);
-        return $result;
     }
 }
