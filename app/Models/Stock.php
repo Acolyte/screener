@@ -42,8 +42,8 @@ class Stock extends Model
 {
     public $table = 'stocks';
 
-    public $fillable = ['code', 'exchange_id', 'type', 'name', 'active', 'ipoAt', 'delistedAt'];
-    public $dates    = ['ipoAt', 'delistedAt'];
+    public $fillable = ['code', 'exchange_id', 'type', 'name', 'active', 'ipo_at', 'delisted_at'];
+    public $dates    = ['ipo_at', 'delisted_at'];
 
     public function exchange()
     {

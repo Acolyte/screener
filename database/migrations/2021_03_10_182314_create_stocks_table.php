@@ -21,8 +21,8 @@ class CreateStocksTable extends Migration
             $table->unsignedSmallInteger('type')->default(StockEnum::stock()->value);
             $table->string('name', 256);
             $table->boolean('active')->default(true);
-            $table->date('ipoAt')->nullable()->default(null);
-            $table->date('delistedAt')->nullable()->default(null);
+            $table->date('ipo_at')->nullable()->default(null);
+            $table->date('delisted_at')->nullable()->default(null);
             $table->timestamps();
             $table->index(['code', 'type']);
             $table->index(['exchange_id', 'code', 'type']);

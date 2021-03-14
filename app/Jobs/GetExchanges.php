@@ -62,5 +62,7 @@ class GetExchanges implements ShouldQueue
                                       'name'        => $Exchange->Name,
                                       'mics'        => $Exchange->MICs]);
         }
+
+        session()->flash('message', iterator_count($ProviderExchanges) . ' exchanges successfully loaded.');
     }
 }

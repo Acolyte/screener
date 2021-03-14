@@ -46,9 +46,6 @@ class Exchange extends Model
 
     public $fillable = ['provider_id', 'country_id', 'currency_id', 'code', 'name', 'mics'];
 
-    /**
-     * Get the comments for the blog post.
-     */
     public function stocks()
     {
         return $this->hasMany(Stock::class)->where('type', StockEnum::stock()->value);

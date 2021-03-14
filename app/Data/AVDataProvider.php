@@ -35,10 +35,15 @@ class AVDataProvider implements DataProvider
             }
             try {
                 $JSON = $Client->get($URL);
-                $Results = json_decode($JSON->getBody()->getContents(), false);
-                $Exchanges = $this->ToExchanges($Results);
-                Storage::disk('local')->put($Filename, igbinary_serialize($Exchanges));
-                return collect(igbinary_unserialize(Storage::disk('local')->get($Filename)));
+                if ($JSON->getStatusCode() === 200) {
+                    $Results = json_decode($JSON->getBody()->getContents(), false);
+                    $Exchanges = $this->ToExchanges($Results);
+                    Storage::disk('local')->put($Filename, igbinary_serialize($Exchanges));
+                    return collect(igbinary_unserialize(Storage::disk('local')->get($Filename)));
+                } else {
+                    Log::error($JSON->getBody()->getContents());
+                    return collect([]);
+                }
             }
             catch(GuzzleException $ex) {
                 Log::error('Failed to fetch exchanges from ' . $this->config['name'] . ' provider', ['message' => $ex->getMessage()]);

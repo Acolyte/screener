@@ -22,9 +22,13 @@ class ProvidersTable extends LivewireDatatable
 
             Column::name('name'),
 
-            Column::name('site')->truncate(),
+            Column::name('site'),
 
             DateColumn::name('created_at'),
+
+            /*NumberColumn::name('exchanges.id')
+                         ->filterable()
+                         ->label('Exchanges Count'),*/
 
             Column::callback(['code'], function ($code)
             {
