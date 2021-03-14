@@ -5,6 +5,6 @@
         </h2>
     </x-slot>
 
-    <livewire:datatable model="App\Models\Provider" include="id, name, site, created_at" searchable="name, site"
-                        dates="created_at"/>
+    <livewire:providers-table/>
+
 </x-app-layout>

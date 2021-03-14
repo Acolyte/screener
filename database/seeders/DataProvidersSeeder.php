@@ -6,7 +6,7 @@ use App\Models\Provider;
 use Illuminate\Database\Seeder;
 use Throwable;
 
-class HistoricalDataProvidersSeeder extends Seeder
+class DataProvidersSeeder extends Seeder
 {
     /**
      * Run the database seeds.
@@ -37,6 +37,6 @@ class HistoricalDataProvidersSeeder extends Seeder
 
     public function providers()
     {
-        return config('app.historicaldata');
+        return config('app.dataprovider');
     }
 }

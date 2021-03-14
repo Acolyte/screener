@@ -5,7 +5,6 @@
         </h2>
     </x-slot>
 
-    <livewire:datatable model="App\Models\Exchange" with="provider"
-                        include="provider.name|Provider, id, code, name, created_at"
-                        searchable="provider.name, code, name" dates="created_at"/>
+    <livewire:exchanges-table/>
+
 </x-app-layout>

@@ -29,6 +29,14 @@ use Illuminate\Database\Eloquent\Model;
  * @property string                                                            $code
  * @property-read \App\Models\Provider                                         $provider
  * @method static Builder|Exchange whereCode($value)
+ * @property int                                                               $provider_id Data provider (Alpha Vantage, Quandl, EOD)
+ * @method static Builder|Exchange whereProviderId($value)
+ * @property int|null                                                          $country_id
+ * @property int|null                                                          $currency_id
+ * @property string|null                                                       $mics
+ * @method static Builder|Exchange whereCountryId($value)
+ * @method static Builder|Exchange whereCurrencyId($value)
+ * @method static Builder|Exchange whereMics($value)
  */
 class Exchange extends Model
 {
@@ -36,7 +44,7 @@ class Exchange extends Model
 
     public $table = 'exchanges';
 
-    public $fillable = ['provider_id', 'code', 'name'];
+    public $fillable = ['provider_id', 'country_id', 'currency_id', 'code', 'name', 'mics'];
 
     /**
      * Get the comments for the blog post.

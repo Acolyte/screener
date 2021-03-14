@@ -35,12 +35,14 @@ use Illuminate\Database\Eloquent\Model;
  * @mixin \Eloquent
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Tick[] $ticks
  * @property-read int|null                                                    $ticks_count
+ * @property string                                                           $code
+ * @method static Builder|Stock whereCode($value)
  */
 class Stock extends Model
 {
     public $table = 'stocks';
 
-    public $fillable = ['symbol', 'exchange_id', 'type', 'name', 'active', 'ipoAt', 'delistedAt'];
+    public $fillable = ['code', 'exchange_id', 'type', 'name', 'active', 'ipoAt', 'delistedAt'];
     public $dates    = ['ipoAt', 'delistedAt'];
 
     public function exchange()

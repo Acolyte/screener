@@ -11,10 +11,10 @@ use Traversable;
  * @method static Traversable GetStocksList($Exchange = null)
  * @method static Traversable GetStockData($Stock, DateTimeInterface $Date, $Period, $Filters)
  */
-class HistoricalData extends Facade
+class DataProvider extends Facade
 {
     protected static function getFacadeAccessor(): string
     {
-        return 'historicaldata';
+        return 'dataprovider';
     }
 }

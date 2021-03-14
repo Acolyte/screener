@@ -8,7 +8,7 @@ use App\Enum\ProviderEnum;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\ServiceProvider;
 
-class HistoricalDataProvider extends ServiceProvider
+class DataProvider extends ServiceProvider
 {
     /**
      * Bootstrap any application services.
@@ -17,7 +17,7 @@ class HistoricalDataProvider extends ServiceProvider
      */
     public function boot()
     {
-        $test = '';
+
     }
 
     /**
@@ -27,13 +27,13 @@ class HistoricalDataProvider extends ServiceProvider
      */
     public function register()
     {
-        $this->app->singleton('historicaldata', function (Application $app)
+        $this->app->singleton('dataprovider', function (Application $app)
         {
-            switch ($app['config']['app']['historicaldata']['default']) {
+            switch ($app['config']['app']['dataprovider']['default']) {
                 case ProviderEnum::alphavantage()->label:
-                    return new EODDataProvider($app['config']['app']['historicaldata'][ProviderEnum::eod()->label]);
+                    return new AVDataProvider($app['config']['app']['dataprovider'][ProviderEnum::alphavantage()->label]);
                 case ProviderEnum::eod()->label:
-                    return new AVDataProvider($app['config']['app']['historicaldata'][ProviderEnum::alphavantage()->label]);
+                    return new EODDataProvider($app['config']['app']['dataprovider'][ProviderEnum::eod()->label]);
             }
             return null;
         });
@@ -41,6 +41,6 @@ class HistoricalDataProvider extends ServiceProvider
 
     public function provides()
     {
-        return ['historicaldata', 'historicaldata.GetExchanges', 'historicaldata.GetStocksList', 'historicaldata.GetStockData'];
+        return ['dataprovider', 'dataprovider.GetExchanges', 'dataprovider.GetStocksList', 'dataprovider.GetStockData'];
     }
 }

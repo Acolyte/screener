@@ -17,15 +17,15 @@ class CreateStocksTable extends Migration
         Schema::create('stocks', function (Blueprint $table) {
             $table->id();
             $table->foreignId('exchange_id');
-            $table->string('symbol', 16)->index();
+            $table->string('code', 16)->index();
             $table->unsignedSmallInteger('type')->default(StockEnum::stock()->value);
             $table->string('name', 256);
             $table->boolean('active')->default(true);
-            $table->date('ipoAt');
+            $table->date('ipoAt')->nullable()->default(null);
             $table->date('delistedAt')->nullable()->default(null);
             $table->timestamps();
-            $table->index(['symbol', 'type']);
-            $table->index(['exchange_id', 'symbol', 'type']);
+            $table->index(['code', 'type']);
+            $table->index(['exchange_id', 'code', 'type']);
         });
     }
 
