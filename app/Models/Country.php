@@ -27,4 +27,9 @@ class Country extends Model
 {
     protected $table    = 'countries';
     protected $fillable = ['isoCode', 'name', 'date_formats'];
+
+    public function exchanges()
+    {
+        return $this->hasMany(Exchange::class);
+    }
 }

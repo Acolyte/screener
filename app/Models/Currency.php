@@ -31,4 +31,8 @@ class Currency extends Model
 
     protected $fillable = ['code', 'name'];
 
+    public function exchanges()
+    {
+        return $this->hasMany(Exchange::class);
+    }
 }

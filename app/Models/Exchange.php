@@ -60,4 +60,14 @@ class Exchange extends Model
     {
         return $this->belongsTo(Provider::class);
     }
+
+    public function currency()
+    {
+        return $this->belongsTo(Currency::class);
+    }
+
+    public function country()
+    {
+        return $this->belongsTo(Country::class);
+    }
 }

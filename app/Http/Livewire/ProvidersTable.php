@@ -26,9 +26,6 @@ class ProvidersTable extends LivewireDatatable
 
             DateColumn::name('created_at'),
 
-            NumberColumn::name('exchanges.id')
-                        ->label('Exchange(s)'),
-
             Column::callback(['code'], function ($code)
             {
                 return view('livewire.providers-table-actions', ['code' => $code]);
