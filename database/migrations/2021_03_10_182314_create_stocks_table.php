@@ -17,6 +17,7 @@ class CreateStocksTable extends Migration
         Schema::create('stocks', function (Blueprint $table) {
             $table->id();
             $table->foreignId('exchange_id');
+            $table->string('sub_exchange')->nullable(true)->default(null);
             $table->string('code', 16)->index();
             $table->unsignedSmallInteger('type')->default(StockEnum::stock()->value);
             $table->string('name', 256);

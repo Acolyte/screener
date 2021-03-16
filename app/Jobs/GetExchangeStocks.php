@@ -2,7 +2,6 @@
 
 namespace App\Jobs;
 
-use App\Enum\StockEnum;
 use App\Facades\DataProvider;
 use App\Models\Exchange;
 use App\Models\Stock;
@@ -11,7 +10,6 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
-use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Log;
 
 class GetExchangeStocks implements ShouldQueue
@@ -42,14 +40,15 @@ class GetExchangeStocks implements ShouldQueue
     {
         $Stocks = DataProvider::GetStocksList($this->Exchange);
 
+        /** @var \App\Data\Stock $Result */
         foreach ($Stocks as $Result) {
-            $Data = ['symbol'      => $Result['symbol'],
-                     'name'        => $Result['name'],
+            $Data = ['code'        => $Result->Code,
+                     'name'        => $Result->Name,
                      'exchange_id' => $this->Exchange->id,
-                     'type'        => (StockEnum::from(strtolower($Result['assetType']))->value),
-                     'active'      => strtolower($Result['status']) === 'active',
-                     'ipoAt'       => Carbon::parse($Result['ipoDate'])->toDate(),
-                     'delistedAt'  => $Result['delistingDate'] !== "null" ? Carbon::parse($Result['delistingDate'])->toDate() : null
+                     'type'        => $Result->Type,
+                     'active'      => $Result->Active,
+                     'ipo_at'      => $Result->IPOAt ? $Result->IPOAt->toDate() : null,
+                     'delisted_at' => $Result->DelistedAt ? $Result->DelistedAt->toDate() : null,
             ];
             Stock::updateOrCreate($Data);
         }

@@ -2,7 +2,6 @@
 
 namespace App\Models;
 
-use App\Enum\StockEnum;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -48,12 +47,7 @@ class Exchange extends Model
 
     public function stocks()
     {
-        return $this->hasMany(Stock::class)->where('type', StockEnum::stock()->value);
-    }
-
-    public function etfs()
-    {
-        return $this->hasMany(Stock::class)->where('type', StockEnum::etf()->value);
+        return $this->hasMany(Stock::class);
     }
 
     public function provider()

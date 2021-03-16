@@ -27,6 +27,10 @@ class Stock
      */
     public $Active;
     /**
+     * @var null|string $SubExchange
+     */
+    public $SubExchange;
+    /**
      * @var null|\DateTimeInterface $IPOAt
      */
     public $IPOAt;
@@ -36,6 +40,7 @@ class Stock
     public $DelistedAt;
 
     public function __construct(int $ExchangeID, string $Code, string $Name, int $Type,
+                                ?string $SubExchange = null,
                                 bool $Active = true,
                                 ?DateTimeInterface $IPOAt = null,
                                 ?DateTimeInterface $DelistedAt = null)
@@ -45,6 +50,7 @@ class Stock
         $this->Name = $Name;
         $this->Type = $Type;
         $this->Active = $Active;
+        $this->SubExchange = $SubExchange;
         $this->IPOAt = $IPOAt;
         $this->DelistedAt = $DelistedAt;
     }

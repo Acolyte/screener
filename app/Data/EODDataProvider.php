@@ -3,12 +3,10 @@
 namespace App\Data;
 
 use App\Enum\ProviderEnum;
-use App\Enum\StockEnum;
 use App\Models\Currency;
 use DateTimeInterface;
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\GuzzleException;
-use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
 use Throwable;
@@ -81,7 +79,7 @@ class EODDataProvider implements DataProvider
                 $JSON = $Client->get($URL);
                 if ($JSON->getStatusCode() === 200) {
                     $Results = json_decode($JSON->getBody()->getContents(), false);
-                    $Stocks = $this->ToStocks($Results);
+                    $Stocks = $this->ToStocks($Exchange, $Results);
                     Storage::disk('local')->put($Filename, igbinary_serialize($Stocks));
                     return collect(igbinary_unserialize(Storage::disk('local')->get($Filename)));
                 } else {
@@ -131,32 +129,24 @@ class EODDataProvider implements DataProvider
         return collect($Response);
     }
 
-    private function ToStocks(array $Results): Traversable
+    private function ToStocks(\App\Models\Exchange $Exchange, array $Results): Traversable
     {
-        /** @var \Illuminate\Support\Collection $Exchanges */
-        $Exchanges = \App\Models\Exchange::whereHas('provider', function (Builder $query)
-        {
-            $query->where('code', '=', ProviderEnum::eod()->label);
-        })->get();
-
         $Response = [];
         foreach ($Results as $Result) {
             $Type = 0;
-            /** @var \App\Models\Exchange $Exchange */
-            $Exchange = $Exchanges->firstWhere('code', '=', $Result->Exchange);
-            switch (strtolower($Result->Type)) {
-                case 'common stock':
-                    $Type = StockEnum::stock()->value;
+            foreach (config('enums.stock') as $name => $value) {
+                if (strtolower($Result->Type) === strtolower($name)) {
+                    $Type = $value;
                     break;
-                case 'fund':
-                    $Type = StockEnum::etf()->value;
-                    break;
+                }
             }
             if ($Type === 0) {
                 Log::error('Failed to deduct stock type from value of ' . $Result->Type);
                 continue;
             }
-            $Response[] = new Stock($Exchange->id, $Result->Code, $Result->Name, $Type);
+
+            $Response[] = new Stock($Exchange->id, $Result->Code,
+                $Result->Name, $Type, $Result->Exchange);
         }
 
         return collect($Response);

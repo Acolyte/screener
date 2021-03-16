@@ -132,11 +132,11 @@ return [
                                                 'site' => 'https://www.alphavantage.co/',
                                                 'key'  => env('AV_API_KEY'),
                                                 'urls' => [
-                                                    'exchanges' => 'https://www.alphavantage.co/query?function=LISTING_STATUS&apikey={AV_API_KEY}',
-                                                    'stocks'    => 'https://eodhistoricaldata.com/api/exchange-symbol-list/{EXCHANGE_CODE}?api_token={EOD_API_KEY}',
+                                                    'exchanges' => 'https://www.alphavantage.co/query?function=LISTING_STATUS&apikey={AV_API_KEY}&fmt=json',
+                                                    'stocks'    => '',
                                                     'data'      => [
-                                                        'all-last-day'   => 'https://eodhistoricaldata.com/api/eod-bulk-last-day/{EXCHANGE_CODE}?api_token={EOD_API_KEY}',
-                                                        'symbol-history' => 'https://eodhistoricaldata.com/api/eod/{STOCK_CODE}.{EXCHANGE_CODE}?from={FROM_DATE}&to={TO_DATE}&api_token={EOD_API_KEY}&period={PERIOD}'
+                                                        'all-last-day'   => '',
+                                                        'symbol-history' => ''
                                                     ]
                                                 ]],
         ProviderEnum::eod()->label          => ['name' => 'EOD Historical Data',
@@ -144,10 +144,10 @@ return [
                                                 'key'  => env('EOD_API_KEY'),
                                                 'urls' => [
                                                     'exchanges' => 'https://eodhistoricaldata.com/api/exchanges-list/?api_token={EOD_API_KEY}&fmt=json',
-                                                    'stocks'    => 'https://eodhistoricaldata.com/api/exchange-symbol-list/{EXCHANGE_CODE}?api_token={EOD_API_KEY}',
+                                                    'stocks'    => 'https://eodhistoricaldata.com/api/exchange-symbol-list/{EXCHANGE_CODE}?api_token={EOD_API_KEY}&fmt=json',
                                                     'data'      => [
-                                                        'all-last-day'   => 'https://eodhistoricaldata.com/api/eod-bulk-last-day/{EXCHANGE_CODE}?api_token={EOD_API_KEY}',
-                                                        'symbol-history' => 'https://eodhistoricaldata.com/api/eod/{STOCK_CODE}.{EXCHANGE_CODE}?from={FROM_DATE}&to={TO_DATE}&api_token={EOD_API_KEY}&period={PERIOD}'
+                                                        'all-last-day'   => 'https://eodhistoricaldata.com/api/eod-bulk-last-day/{EXCHANGE_CODE}?api_token={EOD_API_KEY}&fmt=json',
+                                                        'symbol-history' => 'https://eodhistoricaldata.com/api/eod/{STOCK_CODE}.{EXCHANGE_CODE}?from={FROM_DATE}&to={TO_DATE}&api_token={EOD_API_KEY}&period={PERIOD}&fmt=json'
                                                     ]
                                                 ]],
     ],
