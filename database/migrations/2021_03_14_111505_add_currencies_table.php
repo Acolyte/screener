@@ -13,8 +13,6 @@ class AddCurrenciesTable extends Migration
      */
     public function up()
     {
-        Schema::dropIfExists('currencies');
-
         Schema::create('currencies', function (Blueprint $table)
         {
             $table->bigIncrements('id');

@@ -131,6 +131,8 @@ return [
         ProviderEnum::alphavantage()->label => ['name' => 'Alpha Vantage Co',
                                                 'site' => 'https://www.alphavantage.co/',
                                                 'key'  => env('AV_API_KEY'),
+                                                'stock_load_limit' => env('STOCK_LOAD_LIMIT'),
+                                                'stock_tick' => \App\Enum\TimeframeEnum::D,
                                                 'urls' => [
                                                     'exchanges' => 'https://www.alphavantage.co/query?function=LISTING_STATUS&apikey={AV_API_KEY}&fmt=json',
                                                     'stocks'    => '',
@@ -142,6 +144,8 @@ return [
         ProviderEnum::eod()->label          => ['name' => 'EOD Historical Data',
                                                 'site' => 'https://eodhistoricaldata.com/',
                                                 'key'  => env('EOD_API_KEY'),
+                                                'stock_load_limit' => env('STOCK_LOAD_LIMIT'),
+                                                'stock_tick' => \App\Enum\TimeframeEnum::D,
                                                 'urls' => [
                                                     'exchanges' => 'https://eodhistoricaldata.com/api/exchanges-list/?api_token={EOD_API_KEY}&fmt=json',
                                                     'stocks'    => 'https://eodhistoricaldata.com/api/exchange-symbol-list/{EXCHANGE_CODE}?api_token={EOD_API_KEY}&fmt=json',

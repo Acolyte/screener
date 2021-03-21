@@ -13,8 +13,6 @@ class AddCountriesTable extends Migration
      */
     public function up()
     {
-        Schema::dropIfExists('countries');
-
         Schema::create('countries', function (Blueprint $table)
         {
             $table->bigIncrements('id');

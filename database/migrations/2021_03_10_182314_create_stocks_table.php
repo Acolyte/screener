@@ -19,7 +19,7 @@ class CreateStocksTable extends Migration
             $table->foreignId('exchange_id');
             $table->string('sub_exchange')->nullable(true)->default(null);
             $table->string('code', 16)->index();
-            $table->unsignedSmallInteger('type')->default(StockEnum::stock()->value);
+            $table->unsignedSmallInteger('type')->default(StockEnum::COMMON_STOCK);
             $table->string('name', 256);
             $table->boolean('active')->default(true);
             $table->date('ipo_at')->nullable()->default(null);
