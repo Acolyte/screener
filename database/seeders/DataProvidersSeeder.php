@@ -1,7 +1,9 @@
 <?php
+declare(strict_types=1);
 
 namespace Database\Seeders;
 
+use App\Enum\ProviderEnum;
 use App\Models\Provider;
 use Illuminate\Database\Seeder;
 use Throwable;
@@ -27,6 +29,7 @@ class DataProvidersSeeder extends Seeder
                         $provider->setAttribute($key, $value);
                     }
                 }
+                $provider->type = ProviderEnum::from('code', $code)->toId();
                 $provider->saveOrFail();
             }
             catch(Throwable $ex) {

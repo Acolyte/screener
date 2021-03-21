@@ -1,23 +1,22 @@
 <?php
+declare(strict_types=1);
 
 namespace App\Enum;
 
-use Spatie\Enum\Enum;
+use Premier\Enum\Enum;
 
 /**
  * @method static self alphavantage()
  * @method static self eod()
+ * @method string toCode()
  */
 class ProviderEnum extends Enum
 {
-    public const ALPHA_VANTAGE = 1;
-    public const EOD           = 2;
+    private const ALPHAVANTAGE = 1;
+    private const EOD          = 2;
 
-    protected static function values(): array
-    {
-        return [
-            'alphavantage' => self::ALPHA_VANTAGE,
-            'eod'          => self::EOD
-        ];
-    }
+    private static array $code = [
+        self::ALPHAVANTAGE => 'alphavantage',
+        self::EOD          => 'eod'
+    ];
 }

@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 
 namespace App\Models;
 
@@ -31,12 +32,15 @@ use Illuminate\Database\Eloquent\Model;
  * @method static Builder|Tick whereStockId($value)
  * @method static Builder|Tick whereTimeframe($value)
  * @method static Builder|Tick whereVolume($value)
+ * @property \Illuminate\Support\Carbon      $date
+ * @method static Builder|Tick whereDate($value)
  */
 class Tick extends Model
 {
     protected $table = 'ticks';
 
-    protected $fillable = ['stock_id', 'timeframe', 'open', 'close', 'low', 'high', 'volume'];
+    protected $fillable = ['stock_id', 'date', 'timeframe', 'open', 'close', 'low', 'high', 'volume'];
+    protected $dates    = ['date'];
 
     public function stock()
     {

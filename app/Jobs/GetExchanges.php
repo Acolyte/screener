@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 
 namespace App\Jobs;
 
@@ -18,16 +19,16 @@ class GetExchanges implements ShouldQueue
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
     /**
-     * @var Provider $DataProvider
+     * @var ?Provider $DataProvider
      */
-    private $DataProvider;
+    private ?Provider $DataProvider;
 
     /**
      * Create a new job instance.
      *
      * @param null|\App\Models\Provider $DataProvider
      */
-    public function __construct($DataProvider = null)
+    public function __construct(?Provider $DataProvider = null)
     {
         $this->DataProvider = $DataProvider;
     }

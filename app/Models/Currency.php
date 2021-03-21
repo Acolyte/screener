@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 
 namespace App\Models;
 
@@ -8,12 +9,12 @@ use Illuminate\Database\Eloquent\Model;
 /**
  * App\Models\Currency
  *
- * @property int                             $id
- * @property string                          $code
- * @property string                          $name
- * @property string                          $symbol
- * @property \Illuminate\Support\Carbon|null $created_at
- * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property int                                                                  $id
+ * @property string                                                               $code
+ * @property string                                                               $name
+ * @property string                                                               $symbol
+ * @property \Illuminate\Support\Carbon|null                                      $created_at
+ * @property \Illuminate\Support\Carbon|null                                      $updated_at
  * @method static Builder|Currency newModelQuery()
  * @method static Builder|Currency newQuery()
  * @method static Builder|Currency query()
@@ -24,6 +25,8 @@ use Illuminate\Database\Eloquent\Model;
  * @method static Builder|Currency whereSymbol($value)
  * @method static Builder|Currency whereUpdatedAt($value)
  * @mixin \Eloquent
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Exchange[] $exchanges
+ * @property-read int|null                                                        $exchanges_count
  */
 class Currency extends Model
 {

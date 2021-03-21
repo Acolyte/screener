@@ -17,6 +17,7 @@ class AddProvidersTable extends Migration
         {
             $table->id();
             $table->string('code', 32)->comment('Data provider code (av, eod)');
+            $table->enum('type', array_values(config('enums.provider')))->comment('Data provider type enumeration');
             $table->string('name', 128)->comment('Data provider name (Alpha Vantage, Quandl, EOD)');
             $table->string('site', 128)->comment('Data provider official site');
             $table->string('key', 128)->nullable()->comment('Data provider API key');

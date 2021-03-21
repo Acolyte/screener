@@ -1,5 +1,5 @@
 <?php
-
+declare(strict_types=1);
 
 namespace App\Data;
 
@@ -8,23 +8,23 @@ class Exchange
     /**
      * @var string $Code
      */
-    public $Code;
+    public string $Code;
     /**
      * @var string $Name
      */
-    public $Name;
+    public string $Name;
     /**
      * @var null|int $CountryID
      */
-    public $CountryID;
+    public ?int $CountryID;
     /**
      * @var null|int $CurrencyID
      */
-    public $CurrencyID;
+    public ?int $CurrencyID;
     /**
      * @var null|string $MICs
      */
-    public $MICs;
+    public ?string $MICs;
 
     public function __construct(string $Code, string $Name,
                                 ?int $CountryID = null, ?int $CurrencyID = null, ?string $MICs = null)

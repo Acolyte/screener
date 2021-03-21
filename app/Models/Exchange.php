@@ -1,9 +1,9 @@
 <?php
+declare(strict_types=1);
 
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 /**
@@ -28,7 +28,8 @@ use Illuminate\Database\Eloquent\Model;
  * @property string                                                            $code
  * @property-read \App\Models\Provider                                         $provider
  * @method static Builder|Exchange whereCode($value)
- * @property int                                                               $provider_id Data provider (Alpha Vantage, Quandl, EOD)
+ * @property int                                                               $provider_id Data provider (Alpha
+ *           Vantage, Quandl, EOD)
  * @method static Builder|Exchange whereProviderId($value)
  * @property int|null                                                          $country_id
  * @property int|null                                                          $currency_id
@@ -36,11 +37,11 @@ use Illuminate\Database\Eloquent\Model;
  * @method static Builder|Exchange whereCountryId($value)
  * @method static Builder|Exchange whereCurrencyId($value)
  * @method static Builder|Exchange whereMics($value)
+ * @property-read \App\Models\Country|null                                     $country
+ * @property-read \App\Models\Currency|null                                    $currency
  */
 class Exchange extends Model
 {
-    use HasFactory;
-
     public $table = 'exchanges';
 
     public $fillable = ['provider_id', 'country_id', 'currency_id', 'code', 'name', 'mics'];

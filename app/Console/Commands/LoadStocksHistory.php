@@ -1,9 +1,12 @@
 <?php
+declare(strict_types=1);
 
 namespace App\Console\Commands;
 
 use App\Enum\StockEnum;
 use App\Enum\TimeframeEnum;
+use App\Jobs\GetStockTickers;
+use App\Models\Stock;
 use Carbon\Carbon;
 use Carbon\Exceptions\InvalidFormatException;
 use Illuminate\Console\Command;
@@ -11,14 +14,14 @@ use Illuminate\Console\Command;
 class LoadStocksHistory extends Command
 {
     public const DEFAULT_STOCK_LOAD_LIMIT = 100;
-    public const DEFAULT_STOCK_TICK = TimeframeEnum::D;
+    public const DEFAULT_STOCK_TICK       = 1;
 
     /**
      * The name and signature of the console command.
      *
      * @var string
      */
-    protected $signature = 'stocks:load {type : Stock type} {--limit=} {--from=} {--to=} {--tick=}';
+    protected $signature = 'stocks:load {--type=} {--limit=} {--from=} {--to=} {--tick=}';
 
     /**
      * The console command description.
@@ -47,26 +50,19 @@ class LoadStocksHistory extends Command
     {
         $Provider = config('app.dataprovider.default');
 
-        $Type = $this->argument('type');
+        $Type = $this->option('type');
         if (empty($Type)) {
-            echo 'No stock type has been specified for loading (between ' . StockEnum::COMMON_STOCK . ' and ' . StockEnum::PREFERRED_STOCK . ', exiting' . PHP_EOL;
-            return 1;
-        }
-
-        if (!in_array(intval($Type), [StockEnum::COMMON_STOCK, StockEnum::ETF, StockEnum::FUND, StockEnum::BOND,
-                                      StockEnum::MUTUAL_FUND, StockEnum::PREFERRED_SHARE, StockEnum::PREFERRED_STOCK])) {
-
-            echo 'Invalid stock type has been specified, valid values are ' .
-                implode(', ', [StockEnum::COMMON_STOCK, StockEnum::ETF, StockEnum::FUND, StockEnum::BOND,
-                               StockEnum::MUTUAL_FUND, StockEnum::PREFERRED_SHARE, StockEnum::PREFERRED_STOCK]) . PHP_EOL;
-            return 1;
+            echo 'No stock type has been specified for loading (between ' . StockEnum::commonStock()->toName() .
+                ' and ' . StockEnum::preferredStock()->toName() . ', using '
+                . StockEnum::commonStock()->toName() . PHP_EOL;
+            $Type = StockEnum::commonStock()->toId();
         } else {
-            $Type = StockEnum::make(intval($Type));
+            $Type = StockEnum::create(intval($Type));
         }
 
         $Limit = $this->option('limit');
         if (empty($Limit)) {
-            $Limit = config('app.' . $Provider . '.stock_load_limit') ?
+            $Limit = config('app.dataprovider.stock_load_limit') ?
                 config('app.' . $Provider . '.stock_load_limit') : self::DEFAULT_STOCK_LOAD_LIMIT;
             echo 'No limit has been specified, setting to ' . $Limit . PHP_EOL;
         } else {
@@ -80,7 +76,8 @@ class LoadStocksHistory extends Command
         } else {
             try {
                 $From = Carbon::parse($From);
-            } catch (InvalidFormatException $ex) {
+            }
+            catch(InvalidFormatException $ex) {
                 echo 'Invalid from date format: ' . $ex->getMessage() . PHP_EOL;
             }
         }
@@ -92,27 +89,27 @@ class LoadStocksHistory extends Command
         } else {
             try {
                 $To = Carbon::parse($To);
-            } catch (InvalidFormatException $ex) {
+            }
+            catch(InvalidFormatException $ex) {
                 echo 'Invalid to date format: ' . $ex->getMessage() . PHP_EOL;
             }
         }
 
         $Tick = $this->argument('tick');
-        if (empty($Type)) {
-            echo 'No stock tick has been specified for loading (between ' . TimeframeEnum::D .
-                ' and ' . TimeframeEnum::Y . ', exiting' . PHP_EOL;
-            return 1;
-        }
-
-        if (!in_array(intval($Tick), [TimeframeEnum::D, TimeframeEnum::W, TimeframeEnum::M, TimeframeEnum::Y])) {
-
-            echo 'Invalid stock tick has been specified, valid values are ' .
-                implode(', ', [TimeframeEnum::D, TimeframeEnum::W, TimeframeEnum::M, TimeframeEnum::Y]) . PHP_EOL;
-            return 1;
+        if (empty($Tick)) {
+            $Tick = config('app.dataprovider.stock_tick') ?
+                config('app.dataprovider.stock_tick') : self::DEFAULT_STOCK_TICK;
         } else {
-            $Tick = TimeframeEnum::make(intval($Tick));
+            $Tick = TimeframeEnum::create(intval($Tick));
         }
 
+        $Stocks = Stock::query()->where('type', $Type)->limit($Limit)->get();
+        foreach ($Stocks as $Stock) {
+            dispatch(new GetStockTickers($Stock, $From, $To, $Tick));
+        }
+
+        echo 'Created ' . count($Stocks) . ' job(s) to fetch historical data from ' . $From->toDateString() .
+            ' to ' . $To->toDateString() . ' on ' . $Tick->toName() . ' timeframe' . PHP_EOL;
         return 0;
     }
 }

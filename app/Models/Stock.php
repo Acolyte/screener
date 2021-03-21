@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 
 namespace App\Models;
 
@@ -37,6 +38,10 @@ use Illuminate\Database\Eloquent\Model;
  * @property-read int|null                                                    $ticks_count
  * @property string                                                           $code
  * @method static Builder|Stock whereCode($value)
+ * @property string|null                                                      $sub_exchange
+ * @property \Illuminate\Support\Carbon|null                                  $ipo_at
+ * @property \Illuminate\Support\Carbon|null                                  $delisted_at
+ * @method static Builder|Stock whereSubExchange($value)
  */
 class Stock extends Model
 {

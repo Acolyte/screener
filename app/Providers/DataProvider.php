@@ -30,10 +30,10 @@ class DataProvider extends ServiceProvider
         $this->app->singleton('dataprovider', function (Application $app)
         {
             switch ($app['config']['app']['dataprovider']['default']) {
-                case ProviderEnum::alphavantage()->label:
-                    return new AVDataProvider($app['config']['app']['dataprovider'][ProviderEnum::alphavantage()->label]);
-                case ProviderEnum::eod()->label:
-                    return new EODDataProvider($app['config']['app']['dataprovider'][ProviderEnum::eod()->label]);
+                case ProviderEnum::alphavantage()->toName():
+                    return new AVDataProvider($app['config']['app']['dataprovider'][ProviderEnum::alphavantage()->toName()]);
+                case ProviderEnum::eod()->toName():
+                    return new EODDataProvider($app['config']['app']['dataprovider'][ProviderEnum::eod()->toName()]);
             }
             return null;
         });

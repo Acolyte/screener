@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 
 namespace App\Jobs;
 
@@ -19,7 +20,7 @@ class GetExchangeStocks implements ShouldQueue
     /**
      * @var Exchange $Exchange
      */
-    private $Exchange;
+    private Exchange $Exchange;
 
     /**
      * Create a new job instance.

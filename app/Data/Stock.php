@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 
 namespace App\Data;
 
@@ -9,35 +10,35 @@ class Stock
     /**
      * @var string $Code
      */
-    public $Code;
+    public string $Code;
     /**
      * @var string $Name
      */
-    public $Name;
+    public string $Name;
     /**
      * @var int $ExchangeID
      */
-    public $ExchangeID;
+    public int $ExchangeID;
     /**
      * @var int Type
      */
-    public $Type;
+    public int $Type;
     /**
      * @var bool $Active
      */
-    public $Active;
+    public bool $Active;
     /**
      * @var null|string $SubExchange
      */
-    public $SubExchange;
+    public ?string $SubExchange;
     /**
      * @var null|\DateTimeInterface $IPOAt
      */
-    public $IPOAt;
+    public ?DateTimeInterface $IPOAt;
     /**
      * @var null|\DateTimeInterface $DelistedAt
      */
-    public $DelistedAt;
+    public ?DateTimeInterface $DelistedAt;
 
     public function __construct(int $ExchangeID, string $Code, string $Name, int $Type,
                                 ?string $SubExchange = null,

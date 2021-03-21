@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 
 namespace App\Util;
 
@@ -6,7 +7,7 @@ class Util
 {
     public static function ArrayFromCSV(string $file, bool $hasFieldNames = false,
                                         ?int $lineLength = 512, string $separator = ',',
-                                        string $enclosure = '"', string $escape = '\\')
+                                        string $enclosure = '"', string $escape = '\\'): array
     {
         $result = [];
         $file = fopen($file, 'r');

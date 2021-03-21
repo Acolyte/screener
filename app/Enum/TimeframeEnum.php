@@ -1,29 +1,28 @@
 <?php
+declare(strict_types=1);
 
 namespace App\Enum;
 
-use Spatie\Enum\Enum;
+use Premier\Enum\Enum;
 
 /**
- * @method static self daily()
- * @method static self weekly()
- * @method static self monthly()
- * @method static self yearly()
+ * @method static self d()
+ * @method static self w()
+ * @method static self m()
+ * @method static self y()
+ * @method string toCode()
  */
 class TimeframeEnum extends Enum
 {
-    public const D = 1;
-    public const W = 2;
-    public const M = 3;
-    public const Y = 4;
+    private const D = 1;
+    private const W = 2;
+    private const M = 3;
+    private const Y = 4;
 
-    protected static function values(): array
-    {
-        return [
-            'daily'   => self::D,
-            'weekly'  => self::W,
-            'monthly' => self::M,
-            'yearly'  => self::Y
-        ];
-    }
+    private static array $code = [
+        self::D => 'd',
+        self::W => 'w',
+        self::M => 'm',
+        self::Y => 'y'
+    ];
 }

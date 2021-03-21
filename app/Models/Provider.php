@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 
 namespace App\Models;
 
@@ -9,19 +10,19 @@ use Illuminate\Database\Eloquent\Model;
  * App\Models\Provider
  *
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Exchange[] $exchanges
- * @property-read int|null                                                        $exchanges_count
+ * @property-read int|null                   $exchanges_count
  * @method static Builder|Provider newModelQuery()
  * @method static Builder|Provider newQuery()
  * @method static Builder|Provider query()
  * @mixin \Eloquent
- * @property int                                                                  $id
- * @property string                                                               $code Data provider code (av, eod)
- * @property string                                                               $name Data provider name (Alpha
+ * @property int                             $id
+ * @property string                          $code Data provider code (av, eod)
+ * @property string                          $name Data provider name (Alpha
  *           Vantage, Quandl, EOD)
- * @property string                                                               $site Data provider official site
- * @property string|null                                                          $key  Data provider API key
- * @property \Illuminate\Support\Carbon|null                                      $created_at
- * @property \Illuminate\Support\Carbon|null                                      $updated_at
+ * @property string                          $site Data provider official site
+ * @property string|null                     $key  Data provider API key
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
  * @method static Builder|Provider whereCode($value)
  * @method static Builder|Provider whereCreatedAt($value)
  * @method static Builder|Provider whereId($value)
@@ -29,12 +30,14 @@ use Illuminate\Database\Eloquent\Model;
  * @method static Builder|Provider whereName($value)
  * @method static Builder|Provider whereSite($value)
  * @method static Builder|Provider whereUpdatedAt($value)
+ * @property string                          $type Data provider type enumeration
+ * @method static Builder|Provider whereType($value)
  */
 class Provider extends Model
 {
     public $table = 'providers';
 
-    protected $fillable = ['code', 'name', 'site', 'key'];
+    protected $fillable = ['code', 'type', 'name', 'site', 'key'];
 
     public function exchanges()
     {
