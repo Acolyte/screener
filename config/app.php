@@ -129,8 +129,8 @@ return [
 
     'dataprovider' => [
         'default'                              => ProviderEnum::eod()->toName(),
-        'stock_load_limit'                     => env('STOCK_LOAD_LIMIT'),
-        'stock_tick'                           => TimeframeEnum::d()->toName(),
+        'stock_load_limit'                     => env('STOCK_LOAD_LIMIT', 100),
+        'stock_tick'                           => TimeframeEnum::d()->toId(),
         ProviderEnum::alphavantage()->toName() => ['name' => 'Alpha Vantage Co',
                                                    'site' => 'https://www.alphavantage.co/',
                                                    'key'  => env('AV_API_KEY'),

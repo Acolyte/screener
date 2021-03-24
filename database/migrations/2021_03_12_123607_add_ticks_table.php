@@ -20,12 +20,12 @@ class AddTicksTable extends Migration
             $table->bigInteger('stock_id')->nullable(false);
             $table->date('date')->nullable(false);
             $table->enum('timeframe', array_values(config('enums.timeframe')))->default(TimeframeEnum::d()->toId());
-            $table->decimal('open', 8, 6)->default(0.0);
-            $table->double('close', 8, 6)->default(0.0);
-            $table->double('low', 8, 6)->default(0.0);
-            $table->double('high', 8, 6)->default(0.0);
+            $table->decimal('open', 12, 6)->default(0.0);
+            $table->decimal('close', 12, 6)->default(0.0);
+            $table->decimal('low', 12, 6)->default(0.0);
+            $table->decimal('high', 12, 6)->default(0.0);
             $table->unsignedBigInteger('volume')->default(0);
-            $table->timestamp('created_at', 0)->nullable();
+            $table->timestamps();
             $table->index('stock_id');
             $table->index(['stock_id', 'date']);
             $table->index(['stock_id', 'timeframe', 'date']);

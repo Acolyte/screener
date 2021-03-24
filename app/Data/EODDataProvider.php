@@ -119,6 +119,64 @@ class EODDataProvider implements DataProvider
     }
 
     /**
+     * Calls
+     * https://eodhistoricaldata.com/api/eod/{STOCK_CODE}.{EXCHANGE_CODE}?from={FROM_DATE}&to={TO_DATE}&api_token={EOD_API_KEY}&period={PERIOD}&fmt=json
+     *
+     * @param                         $Stock
+     * @param \DateTimeInterface      $From
+     * @param \DateTimeInterface      $To
+     * @param \App\Enum\TimeframeEnum $Timeframe
+     * @return \Traversable
+     */
+    public function GetStockData(\App\Models\Stock $Stock, DateTimeInterface $From,
+                                 DateTimeInterface $To, TimeframeEnum $Timeframe): Traversable
+    {
+        if (is_null($Stock) || is_null($Stock->exchange)) {
+            Log::error('Cannot retrieve stock data without actual stock and its exchange');
+            return collect([]);
+        }
+
+        $Filename = sprintf('p_%s_exc_%s_stk_%s_frm_%s_to_%s_tck_%s.bson',
+            ProviderEnum::eod()->toCode(), $Stock->exchange->code, $Stock->code,
+            $From->format('dmyy'), $To->format('dmyy'), $Timeframe->toCode());
+        if (Storage::disk('stockdata')->exists($Filename)) {
+            return collect(igbinary_unserialize(Storage::disk('stockdata')->get($Filename)));
+        } else {
+            $Client = new Client();
+            $URL = $this->config['urls']['data']['symbol-history'];
+            foreach (['{STOCK_CODE}'    => $Stock->code,
+                      '{EXCHANGE_CODE}' => $Stock->exchange->code,
+                      '{FROM_DATE}'     => $From->format('yy-m-d'),
+                      '{TO_DATE}'       => $To->format('yy-m-d'),
+                      '{PERIOD}'        => $Timeframe->toName(),
+                      '{EOD_API_KEY}'   => $this->config['key']] as $Search => $Replace) {
+                $URL = str_replace($Search, $Replace, $URL);
+            }
+
+            try {
+                $JSON = $Client->get($URL);
+                if ($JSON->getStatusCode() === 200) {
+                    $Results = json_decode($JSON->getBody()->getContents(), false);
+                    $Data = $this->ToTickers($Stock, $Timeframe, $Results);
+                    Storage::disk('stockdata')->put($Filename, igbinary_serialize($Data));
+                    return collect(igbinary_unserialize(Storage::disk('stockdata')->get($Filename)));
+                } else {
+                    Log::error($JSON->getBody()->getContents());
+                    return collect([]);
+                }
+            }
+            catch(GuzzleException $ex) {
+                Log::error('Failed to fetch stock data for ' . $Stock->name . ' stock with ' . $this->config['name'] . ' provider', ['message' => $ex->getMessage()]);
+            }
+            catch(Throwable $ex) {
+                Log::error('Failed to save stock data response from ' . $Stock->name . ' stock with ' . $this->config['name'] . ' provider to storage', ['message' => $ex->getMessage()]);
+            }
+        }
+
+        return collect([]);
+    }
+
+    /**
      * @param \App\Models\Exchange $Exchange
      * @param array                $Results
      * @return \Traversable
@@ -144,54 +202,6 @@ class EODDataProvider implements DataProvider
         }
 
         return collect($Response);
-    }
-
-    /**
-     * Calls https://eodhistoricaldata.com/api/eod-bulk-last-day/{EXCHANGE_CODE}?api_token={YOUR_API_KEY}
-     *
-     * @param                         $Stock
-     * @param \DateTimeInterface      $From
-     * @param \DateTimeInterface      $To
-     * @param \App\Enum\TimeframeEnum $Timeframe
-     * @return \Traversable
-     */
-    public function GetStockData(\App\Models\Stock $Stock, DateTimeInterface $From,
-                                 DateTimeInterface $To, TimeframeEnum $Timeframe): Traversable
-    {
-        if (is_null($Stock)) {
-            Log::error('Cannot retrieve stock data without actual stock');
-            return collect([]);
-        }
-
-        $Client = new Client();
-        $URL = $this->config['urls']['data']['symbol-history'];
-        foreach (['{STOCK_CODE}'    => $Stock->code,
-                  '{EXCHANGE_CODE}' => $Stock->exchange()->code,
-                  '{FROM_DATE}'     => $From->format('yyyy-mm-dd'),
-                  '{TO_DATE}'       => $To->format('yyyy-mm-dd'),
-                  '{PERIOD}'        => $Timeframe->toName(),
-                  '{EOD_API_KEY}'   => $this->config['key']] as $Search => $Replace) {
-            $URL = str_replace($Search, $Replace, $URL);
-        }
-
-        try {
-            $JSON = $Client->get($URL);
-            if ($JSON->getStatusCode() === 200) {
-                $Results = json_decode($JSON->getBody()->getContents(), false);
-                return $this->ToTickers($Stock, $Timeframe, $Results);
-            } else {
-                Log::error($JSON->getBody()->getContents());
-                return collect([]);
-            }
-        }
-        catch(GuzzleException $ex) {
-            Log::error('Failed to fetch stock data for ' . $Stock->name . ' stock with ' . $this->config['name'] . ' provider', ['message' => $ex->getMessage()]);
-        }
-        catch(Throwable $ex) {
-            Log::error('Failed to save stock data response from ' . $Stock->name . ' stock with ' . $this->config['name'] . ' provider to storage', ['message' => $ex->getMessage()]);
-        }
-
-        return collect([]);
     }
 
     /**
