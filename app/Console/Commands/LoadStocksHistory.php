@@ -136,16 +136,18 @@ class LoadStocksHistory extends Command
 
         echo 'Dispatching work on ' . count($Batches) . ' batch(es) with ' . $BatchSize . ' stocks per batch' . PHP_EOL;
 
-        $Batch = Bus::batch([$Batches])->then(function (Batch $batch)
-        {
-            Log::info('All jobs in batch ' . $batch->id . ' were completed successfully');
-        })->catch(function (Batch $batch, Throwable $e)
-        {
-            Log::error('Error during batch ' . $batch->id . ' processing: ' . $e->getMessage());
-        })->finally(function (Batch $batch)
-        {
+        for ($index = 0; $index <= count($Batches); $index++) {
+            $Batch = Bus::batch($Batches[$index])->onQueue('queue-' . $index % 5)->then(function (Batch $batch)
+            {
+                Log::info('All jobs in batch ' . $batch->id . ' were completed successfully');
+            })->catch(function (Batch $batch, Throwable $e)
+            {
+                Log::error('Error during batch ' . $batch->id . ' processing: ' . $e->getMessage());
+            })->finally(function (Batch $batch)
+            {
 
-        })->dispatch();
+            })->dispatch();
+        }
         echo 'Successfully dispatched work to work queue with batch ID of ' . $Batch->id . PHP_EOL;
         return 0;
     }

@@ -96,9 +96,9 @@ class GetStockTickers implements ShouldQueue
                 }
             }
 
-            Log::info('Stock ' . $Stock->code . ' with ' . iterator_count($StockTicks) . ' tick(s) has been loaded successfully');
+            Log::info('Stock ' . $Stock->code . ' with ' . iterator_count($StockTicks) . ' tick(s) has been loaded successfully in job ' . $this->job->getJobId());
             if (App::runningInConsole()) {
-                echo 'Stock ' . $Stock->code . ' with ' . iterator_count($StockTicks) . ' tick(s) has been loaded successfully' . PHP_EOL;
+                echo 'Stock ' . $Stock->code . ' with ' . iterator_count($StockTicks) . ' tick(s) has been loaded successfully in job ' . $this->job->getJobId() . PHP_EOL;
             }
         }
     }

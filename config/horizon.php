@@ -187,15 +187,14 @@ return [
         ],
 
         'local' => [
-            'supervisor-1' => [
-                'connection'      => 'redis',
-                'queue'           => ['default'],
-                'balance'         => 'auto',
-                'minProcesses'    => 5,
-                'maxProcesses'    => 10,
-                'balanceMaxShift' => 1,
-                'balanceCooldown' => 3,
-                'tries'           => 3,
+            'supervisor-1' => ['connection'      => 'redis',
+                               'queue'           => ['default', 'queue-0', 'queue-1', 'queue-2', 'queue-3', 'queue-4'],
+                               'balance'         => 'auto',
+                               'minProcesses'    => 1,
+                               'maxProcesses'    => 5,
+                               'balanceMaxShift' => 1,
+                               'balanceCooldown' => 3,
+                               'tries'           => 1,
             ],
         ],
     ],
