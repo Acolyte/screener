@@ -191,7 +191,7 @@ return [
                 'connection'      => 'redis',
                 'queue'           => ['default'],
                 'balance'         => 'auto',
-                'minProcesses'    => 1,
+                'minProcesses'    => 5,
                 'maxProcesses'    => 10,
                 'balanceMaxShift' => 1,
                 'balanceCooldown' => 3,

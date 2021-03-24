@@ -5,6 +5,7 @@ namespace App\Jobs;
 
 use App\Enum\TimeframeEnum;
 use App\Facades\DataProvider;
+use App\Models\Stock;
 use App\Models\Tick;
 use DateTimeInterface;
 use Illuminate\Bus\Batchable;
@@ -22,7 +23,7 @@ class GetStockTickers implements ShouldQueue
     use Batchable, Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
     /**
-     * @var \App\Models\Stock[]
+     * @var int[] $stocks
      */
     private array $stocks;
 
@@ -44,7 +45,7 @@ class GetStockTickers implements ShouldQueue
     /**
      * Create a new job instance.
      *
-     * @param \App\Models\Stock[]     $stocks
+     * @param int[]                   $stocks
      * @param \DateTimeInterface      $from
      * @param \DateTimeInterface      $to
      * @param \App\Enum\TimeframeEnum $ticker
@@ -64,17 +65,18 @@ class GetStockTickers implements ShouldQueue
      */
     public function handle()
     {
-        foreach ($this->stocks as $stock) {
+        foreach ($this->stocks as $StockID) {
             if ($this->batch()->cancelled()) {
                 return;
             }
 
-            $StockTicks = DataProvider::GetStockData($stock, $this->from, $this->to, $this->ticker);
+            $Stock = Stock::query()->find($StockID);
+            $StockTicks = DataProvider::GetStockData($Stock, $this->from, $this->to, $this->ticker);
 
             /** @var \App\Data\Ticker $Result */
             foreach ($StockTicks as $Result) {
                 $Data = [
-                    'stock_id'  => $stock->id,
+                    'stock_id'  => $Stock->id,
                     'timeframe' => $this->ticker->toId(),
                     'date'      => $Result->Date,
                     'open'      => $Result->Open,
@@ -87,16 +89,16 @@ class GetStockTickers implements ShouldQueue
                     Tick::updateOrCreate($Data);
                 }
                 catch(Throwable $ex) {
-                    Log::error('Failed to save tick data for stock ' . $stock->code . ': ' . $ex->getMessage());
+                    Log::error('Failed to save tick data for stock ' . $Stock->code . ': ' . $ex->getMessage());
                     if (App::runningInConsole()) {
-                        echo 'Failed to save tick data for stock ' . $stock->code . ': ' . $ex->getMessage() . PHP_EOL;
+                        echo 'Failed to save tick data for stock ' . $Stock->code . ': ' . $ex->getMessage() . PHP_EOL;
                     }
                 }
             }
 
-            Log::info('Stock ' . $stock->code . ' with ' . iterator_count($StockTicks) . ' tick(s) has been loaded successfully');
+            Log::info('Stock ' . $Stock->code . ' with ' . iterator_count($StockTicks) . ' tick(s) has been loaded successfully');
             if (App::runningInConsole()) {
-                echo 'Stock ' . $stock->code . ' with ' . iterator_count($StockTicks) . ' tick(s) has been loaded successfully' . PHP_EOL;
+                echo 'Stock ' . $Stock->code . ' with ' . iterator_count($StockTicks) . ' tick(s) has been loaded successfully' . PHP_EOL;
             }
         }
     }

@@ -131,7 +131,7 @@ class LoadStocksHistory extends Command
         Stock::query()->where('type', $Type)
              ->orderBy('code')->chunk($BatchSize, function (Collection $Stocks) use (&$Batches, $From, $To, $Tick)
             {
-                $Batches[] = new GetStockTickers($Stocks->all(), $From, $To, $Tick);
+                $Batches[] = new GetStockTickers($Stocks->pluck('id')->toArray(), $From, $To, $Tick);
             });
 
         echo 'Dispatching work on ' . count($Batches) . ' batch(es) with ' . $BatchSize . ' stocks per batch' . PHP_EOL;
